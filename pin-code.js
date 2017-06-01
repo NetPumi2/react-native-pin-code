@@ -110,6 +110,7 @@ class CodePin extends Component {
           returnKeyType={'done'}
           autoCapitalize={'sentences'}
           autoCorrect={false}
+          autoFocus={index === 0 ? true : false}
           {...props}
         />
       );
