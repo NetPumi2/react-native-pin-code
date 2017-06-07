@@ -25,8 +25,14 @@ class CodePin extends Component {
     this.focus(0);
   };
 
-  focus = id => {
-    this.textInputsRefs[id].focus();
+  focus = (id) => {
+      const length = this.textInputsRefs.length;
+      if (id >= 0 && id <= length) {
+        this.textInputsRefs[id].focus();
+      } else {
+        console.log("--------nothing");
+        this.clean();
+      }
   };
 
   isFocus = id => {
@@ -110,6 +116,8 @@ class CodePin extends Component {
           returnKeyType={'done'}
           autoCapitalize={'sentences'}
           autoCorrect={false}
+          autoFocus={index === 0 ? true : false}
+          maxLength={1}
           {...props}
         />
       );
