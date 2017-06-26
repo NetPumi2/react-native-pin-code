@@ -31,17 +31,33 @@ export const codePinStyles = StyleSheet.create({
     shadowRadius  : 5,
     shadowOpacity : 0.4
   },
+  pinLock: {
+    minHeight       : 40,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor : '#F0F0F0',
+    flex            : 1,
+    marginLeft      : 20,
+    marginRight     : 20,
+    borderRadius    : 5,
+    shadowColor     : '#000000',
+    shadowOffset    : {
+      width  : 1,
+      height : 1
+    },
+    shadowRadius  : 5,
+    shadowOpacity : 0.4
+  },
   text: {
-    textAlign   : 'center', 
-    color       : 'gray', 
-    fontSize    : 20, 
+    textAlign   : 'center',
+    color       : 'gray',
+    fontSize    : 20,
     marginTop   : 30
   },
   error: {
-    textAlign   : 'center', 
-    color       : 'red', 
+    textAlign   : 'center',
+    color       : 'red',
     paddingTop  : 10
   }
 });
-
-

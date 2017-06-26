@@ -25,8 +25,14 @@ class CodePin extends Component {
     this.focus(0);
   };
 
-  focus = id => {
-    this.textInputsRefs[id].focus();
+  focus = (id) => {
+      const length = this.textInputsRefs.length;
+      if (id >= 0 && id <= length) {
+        this.textInputsRefs[id].focus();
+      } else {
+        console.log("--------nothing");
+        this.clean();
+      }
   };
 
   isFocus = id => {
@@ -56,7 +62,7 @@ class CodePin extends Component {
           code: new Array(this.props.number).fill(''),
           edit: 0
         });
-
+        this.props.onError();
         return;
       } else {
         this.setState({
@@ -92,34 +98,39 @@ class CodePin extends Component {
       errorStyle,
       containerStyle,
       containerPinStyle,
-      ...props
+      onError,
+      lock,
+      lockMessage,
+      ...props,
     } = this.props;
 
     pins = [];
 
     for (let index = 0; index < number; index++) {
       const id = index;
-      pins.push(
-        <TextInput
-          key={id}
-          ref={ref => (this.textInputsRefs[id] = ref)}
-          onChangeText={text => this.handleEdit(text, id)}
-          onFocus={() => this.isFocus(id)}
-          value={this.state.code[id] ? this.state.code[id].toString() : ''}
-          style={[codePinStyles.pin, pinStyle]}
-          returnKeyType={'done'}
-          autoCapitalize={'sentences'}
-          autoCorrect={false}
-          {...props}
-        />
-      );
+      if(!lock) {
+        pins.push(
+          <TextInput
+            key={id}
+            ref={ref => (this.textInputsRefs[id] = ref)}
+            onChangeText={text => this.handleEdit(text, id)}
+            onFocus={() => this.isFocus(id)}
+            value={this.state.code[id] ? this.state.code[id].toString() : ''}
+            style={[codePinStyles.pin, pinStyle]}
+            returnKeyType={'done'}
+            autoCapitalize={'sentences'}
+            autoCorrect={false}
+            autoFocus={index === 0 ? true : false}
+            maxLength={1}
+            {...props}
+          />
+        );
+      } else {
+        pins.push(
+          <View style={[codePinStyles.pinLock, pinStyle]} key={index}/>
+        );
+      }
     }
-
-    const error = this.state.error
-      ? <Text style={[codePinStyles.error, errorStyle]}>
-          {this.state.error}
-        </Text>
-      : null;
 
     return (
       <View style={[codePinStyles.container, containerStyle]}>
@@ -128,7 +139,7 @@ class CodePin extends Component {
           {text}
         </Text>
 
-        {error}
+          {this.renderErrorOrLock(lock, lockMessage, errorStyle)}
 
         <View style={[codePinStyles.containerPin, containerPinStyle]}>
 
@@ -139,6 +150,27 @@ class CodePin extends Component {
       </View>
     );
   }
+
+  renderErrorOrLock(lock, lockMessage, errorStyle) {
+    const error = this.state.error
+      ? <Text style={[codePinStyles.error, errorStyle]}>
+          {this.state.error}
+        </Text>
+      : null;
+
+    const lockMessageView = lock
+      ? <Text style={[codePinStyles.error, errorStyle]}>
+          {lockMessage}
+        </Text>
+      : null;
+
+    if (lockMessageView != null) {
+      return lockMessageView;
+    } else {
+      return error;
+    }
+  }
+
 }
 
 CodePin.propTypes = {
@@ -160,7 +192,8 @@ CodePin.defaultProps = {
   containerPinStyle: {},
   containerStyle: {},
   textStyle: {},
-  errorStyle: {}
+  errorStyle: {},
+  lock: false,
 };
 
 export default CodePin;
