@@ -30,7 +30,7 @@ class CodePin extends Component {
       if (id >= 0 && id <= length) {
         this.textInputsRefs[id].focus();
       } else {
-        console.log("--------nothing");
+        console.log("--------nothing 1");
         this.clean();
       }
   };
