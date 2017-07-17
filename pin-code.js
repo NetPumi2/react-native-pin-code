@@ -30,7 +30,7 @@ class CodePin extends Component {
       if (id >= 0 && id <= length) {
         this.textInputsRefs[id].focus();
       } else {
-        console.log("--------nothing 1");
+        console.log("--------nothing");
         this.clean();
       }
   };
@@ -111,6 +111,7 @@ class CodePin extends Component {
       if(!lock) {
         pins.push(
           <TextInput
+            accessibilityLabel={`passwordBoxNumber${index}`}
             key={id}
             ref={ref => (this.textInputsRefs[id] = ref)}
             onChangeText={text => this.handleEdit(text, id)}
@@ -127,7 +128,7 @@ class CodePin extends Component {
         );
       } else {
         pins.push(
-          <View style={[codePinStyles.pinLock, pinStyle]} key={index}/>
+          <View style={[codePinStyles.pinLock, pinStyle]} key={index} accessibilityLabel={`passwordFakeBoxNumber${index}`}/>
         );
       }
     }
@@ -135,7 +136,7 @@ class CodePin extends Component {
     return (
       <View style={[codePinStyles.container, containerStyle]}>
 
-        <Text style={[codePinStyles.text, textStyle]}>
+        <Text style={[codePinStyles.text, textStyle]} accessibilityLabel={'info message'}>
           {text}
         </Text>
 
@@ -153,13 +154,13 @@ class CodePin extends Component {
 
   renderErrorOrLock(lock, lockMessage, errorStyle) {
     const error = this.state.error
-      ? <Text style={[codePinStyles.error, errorStyle]}>
+      ? <Text style={[codePinStyles.error, errorStyle]} accessibilityLabel={'error message'}>
           {this.state.error}
         </Text>
       : null;
 
     const lockMessageView = lock
-      ? <Text style={[codePinStyles.error, errorStyle]}>
+      ? <Text style={[codePinStyles.error, errorStyle]} accessibilityLabel={'lock error message'}>
           {lockMessage}
         </Text>
       : null;
