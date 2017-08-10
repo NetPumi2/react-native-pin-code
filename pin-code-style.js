@@ -17,6 +17,7 @@ export const codePinStyles = StyleSheet.create({
     marginTop       : 20,
   },
   pin: {
+    minHeight       : 40,
     backgroundColor : '#F0F0F0',
     textAlign       : 'center',
     flex            : 1,
