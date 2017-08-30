@@ -86,8 +86,7 @@ class CodePin extends Component {
           code: newCode,
           edit: this.state.edit,
         });
-
-        this.props.success(decryptedData);
+        this.props.success({ decryptedData, pin: fullStringPin });
       }
 
       return;
