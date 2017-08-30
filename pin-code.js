@@ -47,20 +47,36 @@ class CodePin extends Component {
     });
   };
 
+  getDecryptedData = (pin, stringForDecryption, decrypt) => {
+    if(!pin || !stringForDecryption || !decrypt) return false;
+    let result;
+
+    try {
+      result = decrypt(stringForDecryption, pin);
+    } catch (error) {
+      result = false;
+    }
+    return result;
+  }
+
   handleEdit = (number, id) => {
-    let newCode = this.state.code.slice();
+    const newCode = this.state.code.slice();
     newCode[id] = number;
 
-    // User filling the last pin ?
+    // User filling the last digit ?
     if (id === this.props.number - 1) {
-      // But it's different than code
-      if (this.props.code !== newCode.join('')) {
+      const fullStringPin = newCode.join('');
+      const { decrypt, stringForDecryption } = this.props;
+
+      const decryptedData = this.getDecryptedData(fullStringPin, stringForDecryption, decrypt);
+
+      if (!decryptedData) {
         this.focus(0);
 
         this.setState({
           error: this.props.error,
           code: new Array(this.props.number).fill(''),
-          edit: 0
+          edit: 0,
         });
         this.props.onError();
         return;
@@ -68,10 +84,10 @@ class CodePin extends Component {
         this.setState({
           error: '',
           code: newCode,
-          edit: this.state.edit
+          edit: this.state.edit,
         });
 
-        this.props.success();
+        this.props.success(decryptedData);
       }
 
       return;
@@ -171,18 +187,18 @@ class CodePin extends Component {
       return error;
     }
   }
-
 }
 
 CodePin.propTypes = {
-  code: PropTypes.string.isRequired,
+  stringForDecryption: PropTypes.string.isRequired,
+  decrypt: PropTypes.func.isRequired,
   success: PropTypes.func.isRequired,
   number: PropTypes.number,
   pinStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
   containerPinStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
   containerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
   textStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
-  errorStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
+  errorStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
 };
 
 CodePin.defaultProps = {
